@@ -1,14 +1,13 @@
 %% initialize
 clear all
 close all
+max_time = 10000;
 
 %% Builder
 sol_system;
 
-figure
 plot(0, 0);
 hold on
-Solup = [];
 count = 1;
 
 for obj = Sol
@@ -24,3 +23,21 @@ for obj = Sol
     count = count +1;
 end
 
+%% chart the path
+for i = 1:max_time
+    count = 1;
+    for obj = Sol
+        if obj.name == "Sun"
+            obj.x = 0;
+            obj.y = 0;
+        else
+            x = obj.x*cosd((1/obj.p)*1e+15) + obj.y*sind((1/obj.p)*1e+15);
+            y = -obj.x*sind((1/obj.p)*1e+15) + obj.y*cosd((1/obj.p)*1e+15);
+            obj.x = x;
+            obj.y = y;
+            plot(obj.x, obj.y, 'r.', 'markers', (obj.d/10000));
+            Sol(count) = obj;
+            count = count +1;
+        end
+    end
+end
